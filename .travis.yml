@@ -1,0 +1,18 @@
+# .travis.yml
+language: node_js
+node_js:
+  - '10.15.3'
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GH_TOKEN  # Set in the settings page of your repository, as a secure variable
+  keep_history: true
+  on:
+    branch: master
+cache:
+  yarn: true
+script:
+  - git config --global user.name "${GH_NAME}"
+  - git config --global user.email "${GH_EMAIL}"
+  - echo "machine github.com login ${GH_NAME} password ${GH_TOKEN}" > ~/.netrc
+  - cd website && yarn install && GIT_USER="${GH_NAME}" CURRENT_BRANCH=source yarn run publish-gh-pages
